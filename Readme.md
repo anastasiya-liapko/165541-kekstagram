@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Anastasiya Liapko](https://up.htmlacademy.ru/javascript/10/user/165541).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Катревич](https://htmlacademy.ru/profile/id189351).
 
 ---
 
