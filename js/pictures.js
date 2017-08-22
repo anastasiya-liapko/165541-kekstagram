@@ -1,31 +1,42 @@
 'use strict';
 
-var picture = [
+var picture = [];
 
-  getUrl = function (min, max) {
-    var url;
-    for (var i = min; i <= max; i++) {
-      url = 'photos/{{' + i + '}}.jpg';
-    }
-    return url;
-  },
-
-  getLikes = function (min, max) {
-    var likes = min - 0.5 + Math.random() * (max - min + 1);
-    likes = Math.round(likes);
-    return likes;
-  },
-
-  comments: ['Всё отлично!',
+var comments = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!']
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
-];
+var getUrl = function (min, max) {
+  var url;
+  for (var i = min; i <= max; i++) {
+    url = 'photos/{{' + i + '}}.jpg';
+  }
+  return url;
+};
 
-picture.getUrl(1, 25);
-picture.getLikes(15, 200);
+var getLikes = function (min, max) {
+  var likes = min - 0.5 + Math.random() * (max - min + 1);
+  likes = Math.round(likes);
+  return likes;
+};
+
+getComment = function (comments) {
+  var comment = comments[number];
+  var number = Math.floor(Math.random() * comments.length);
+  return comment;
+
+getUrl(1, 25);
+getLikes(15, 200);
+getComment(comments);
+
+var getPicture = function (url, likes, comment) {
+  for (var i = 0; i < 26, i++) {
+    picture.push(url, likes, comment);
+  };
+};
+
 
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
