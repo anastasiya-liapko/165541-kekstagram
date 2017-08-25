@@ -9,7 +9,7 @@ var comments = ['Всё отлично!',
 var getUrl = function (min, max) {
   var url = [];
   for (var i = 0; i < max; i++) {
-    url[i] = 'photos/{{' + (i + 1) + '}}.jpg';
+    url[i] = 'photos/' + (i + 1) + '.jpg';
   }
   return url;
 };
@@ -65,22 +65,9 @@ for (var i = 0; i < pictures.length; i++) {
 picturesList.appendChild(fragment);
 
 var renderGallery = function (picture) {
-  var gallery = galleryOverlay.querySelector('.gallery-overlay-preview');
-  gallery.querySelector('.gallery-overlay-image').src = picture[0];
-  gallery.querySelector('.likes-count').textContent = picture[1];
-  gallery.querySelector('.comments-count').textContent = picture[2];
-  return gallery;
+  galleryOverlay.querySelector('.gallery-overlay-image').src = picture[0];
+  galleryOverlay.querySelector('.likes-count').textContent = picture[1];
+  galleryOverlay.querySelector('.comments-count').textContent = picture[2];
+  return galleryOverlay;
 };
-var gallery = renderGallery(pictures[0]);
-galleryOverlay.appendChild(gallery);
-
-
-// var renderGallery = function (picture) {
-//   var gallery = galleryOverlay.querySelector('.gallery-overlay-preview');
-//   gallery.querySelector('img').src = picture.url;
-//   gallery.querySelector('.likes-count').textContent = picture.likes;
-//   gallery.querySelector('.comments-count').textContent = picture.comment;
-//   return gallery;
-// };
-// var gallery = renderGallery(pictures[0]);
-// galleryOverlay.appendChild(gallery);
+renderGallery(pictures[0]);
