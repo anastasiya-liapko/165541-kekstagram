@@ -47,13 +47,15 @@ var pictures = createPictures(url, likes, comment);
 
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
+document.querySelector('.upload-overlay').classList.add('hidden');
 var galleryOverlay = document.querySelector('.gallery-overlay');
+galleryOverlay.classList.remove('hidden');
 
-var renderPictures = function () {
+var renderPictures = function (picture) {
   var picturesElement = pictureTemplate.cloneNode(true);
-  picturesElement.querySelectorAll('img').src = pictures[i].url;
-  picturesElement.querySelector('.picture-likes').textContent = pictures[i].likes;
-  picturesElement.querySelector('.picture-comments').textContent = pictures[i].comment;
+  picturesElement.querySelector('img').src = picture.url;
+  picturesElement.querySelector('.picture-likes').textContent = picture.likes;
+  picturesElement.querySelector('.picture-comments').textContent = picture.comment;
   return picturesElement;
 };
 var fragment = document.createDocumentFragment();
@@ -62,15 +64,10 @@ for (var i = 0; i < pictures.length; i++) {
 }
 picturesList.appendChild(fragment);
 
-document.querySelector('.upload-overlay').classList.add('hidden');
-document.querySelector('.gallery-overlay').classList.remove('hidden');
-
-var renderGallery = function () {
-  var galleryElement = pictureTemplate.cloneNode(true);
-  galleryElement.querySelector('.gallery-overlay-image').src = pictures[0].url;
-  galleryElement.querySelector('.likes-count').textContent = pictures[0].likes;
-  galleryElement.querySelector('.comments-count').textContent = pictures[0].comment;
-  galleryOverlay.appendChild(galleryElement);
+var renderGallery = function (picture) {
+  galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
+  galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
+  galleryOverlay.querySelector('.comments-count').textContent = picture.comment;
+  galleryOverlay.appendChild(galleryOverlay);
 };
-
 renderGallery(pictures[0]);
