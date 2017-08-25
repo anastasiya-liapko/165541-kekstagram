@@ -64,13 +64,12 @@ for (var i = 0; i < pictures.length; i++) {
 }
 picturesList.appendChild(fragment);
 
-
 var renderGallery = function (picture) {
-  var galleryUrl = galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
-  var galleryLikes = galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
-  var galleryComment = galleryOverlay.querySelector('.comments-count').textContent = picture.comment;
-  galleryOverlay.appendChild(galleryUrl);
-  galleryOverlay.appendChild(galleryLikes);
-  galleryOverlay.appendChild(galleryComment);
+  var gallery = galleryOverlay.querySelector('.gallery-overlay-preview');
+  gallery.querySelector('.gallery-overlay-image').src = picture.url;
+  gallery.querySelector('.likes-count').textContent = picture.likes;
+  gallery.querySelector('.comments-count').textContent = picture.comment;
+  return gallery;
 };
-renderGallery(pictures[0]);
+var gallery = renderGallery(pictures[0]);
+galleryOverlay.appendChild(gallery);
