@@ -64,10 +64,13 @@ for (var i = 0; i < pictures.length; i++) {
 }
 picturesList.appendChild(fragment);
 
+
 var renderGallery = function (picture) {
-  galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
-  galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
-  galleryOverlay.querySelector('.comments-count').textContent = picture.comment;
-  galleryOverlay.appendChild(galleryOverlay);
+  var galleryUrl = galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
+  var galleryLikes = galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
+  var galleryComment = galleryOverlay.querySelector('.comments-count').textContent = picture.comment;
+  galleryOverlay.appendChild(galleryUrl);
+  galleryOverlay.appendChild(galleryLikes);
+  galleryOverlay.appendChild(galleryComment);
 };
 renderGallery(pictures[0]);
