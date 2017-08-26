@@ -7,7 +7,7 @@ var commentsArray = ['Всё отлично!',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
 var getUrls = function (min, max) {
-  var urls = {};
+  var urls = [];
   for (var i = 0; i < max; i++) {
     urls[i] = 'photos/' + (i + 1) + '.jpg';
   }
@@ -15,7 +15,7 @@ var getUrls = function (min, max) {
 };
 
 var getLikes = function (min, max) {
-  var likes = {};
+  var likes = [];
   for (var i = 0; i < 25; i++) {
     likes[i] = min - 0.5 + Math.random() * (max - min + 1);
     likes[i] = Math.round(likes[i]);
@@ -24,7 +24,7 @@ var getLikes = function (min, max) {
 };
 
 var getComments = function () {
-  var comments = {};
+  var comments = [];
   for (var i = 0; i < 25; i++) {
     var number = Math.floor(Math.random() * commentsArray.length);
     comments[i] = commentsArray[number];
