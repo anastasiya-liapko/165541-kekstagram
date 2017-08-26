@@ -35,7 +35,11 @@ var getComments = function () {
 var createPictures = function (urls, likes, comments) {
   var pictures = [];
   for (var i = 0; i < 25; i++) {
-    pictures[i] = [urls[i], likes[i], comments[i]];
+    pictures[i] = {
+      url: urls[i],
+      likes: likes[i],
+      comment: comments[i]
+    };
   }
   return pictures;
 };
