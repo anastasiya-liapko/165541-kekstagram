@@ -1,21 +1,21 @@
 'use strict';
 
-var comments = ['Всё отлично!',
+var commentsArray = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
-var getUrl = function (min, max) {
-  var url = [];
+var getUrls = function (min, max) {
+  var urls = {};
   for (var i = 0; i < max; i++) {
-    url[i] = 'photos/' + (i + 1) + '.jpg';
+    urls[i] = 'photos/' + (i + 1) + '.jpg';
   }
-  return url;
+  return urls;
 };
 
 var getLikes = function (min, max) {
-  var likes = [];
+  var likes = {};
   for (var i = 0; i < 25; i++) {
     likes[i] = min - 0.5 + Math.random() * (max - min + 1);
     likes[i] = Math.round(likes[i]);
@@ -23,27 +23,27 @@ var getLikes = function (min, max) {
   return likes;
 };
 
-var getComment = function () {
-  var comment = [];
+var getComments = function () {
+  var comments = {};
   for (var i = 0; i < 25; i++) {
-    var number = Math.floor(Math.random() * comments.length);
-    comment[i] = comments[number];
+    var number = Math.floor(Math.random() * commentsArray.length);
+    comments[i] = commentsArray[number];
   }
-  return comment;
+  return comments;
 };
 
-var createPictures = function (url, likes, comment) {
+var createPictures = function (urls, likes, comments) {
   var pictures = [];
   for (var i = 0; i < 25; i++) {
-    pictures[i] = [url[i], likes[i], comment[i]];
+    pictures[i] = [urls[i], likes[i], comments[i]];
   }
   return pictures;
 };
 
-var url = getUrl(1, 25);
+var urls = getUrls(1, 25);
 var likes = getLikes(15, 200);
-var comment = getComment(comments);
-var pictures = createPictures(url, likes, comment);
+var comments = getComments(commentsArray);
+var pictures = createPictures(urls, likes, comments);
 
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
