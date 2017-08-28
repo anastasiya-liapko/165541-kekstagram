@@ -132,3 +132,47 @@ setupOpen.addEventListener('click', function () {
 //     }
 //   }
 // });
+
+// var uploadSelectImage = document.forms[2];
+// var uploadFile = uploadSelectImage.elements[0];
+// var uploadImage = document.querySelector('.upload-image');
+// var uploadOverlay = document.querySelector('.upload-overlay');
+// var uploadFormCancel = uploadSelectImage.querySelector('.upload-form-cancel');
+// var uploadResizeControlsValue = uploadSelectImage.querySelector('.upload-resize-controls-value');
+// var uploadResizeControlsButtonDec = uploadSelectImage.querySelector('.upload-resize-controls-button-dec');
+// var uploadResizeControlsButtonInc = uploadSelectImage.querySelector('.upload-resize-controls-button-inc');
+// var effectImagePreview = uploadSelectImage.querySelector('.effect-image-preview');
+
+
+// uploadFile.addEventListener('invalid', function (evt) {
+//   if (uploadFile.validity.valid) {
+//     uploadImage.classList.add('hidden');
+//     uploadOverlay.classList.remove('hidden');
+//     document.addEventListener('keydown', function () {
+//       if (evt.keyCode === 27) {
+//         uploadOverlay.classList.add('hidden');
+//       }
+//     });
+//   } else {
+//     uploadFile.setCustomValidity('');
+//   }
+// });
+
+// uploadFormCancel.addEventListener('click', function () {
+//   uploadOverlay.classList.add('hidden');
+//   uploadImage.classList.remove('hidden');
+// });
+
+// uploadResizeControlsButtonDec.addEventListener('click', function () {
+//   var resizeControlsValue;
+//   resizeControlsValue = uploadResizeControlsValue + 25;
+//   effectImagePreview.setAttribute('style', 'transform: scale(resizeControlsValue / 100)');
+//   return resizeControlsValue;
+// });
+
+// uploadResizeControlsButtonInc.addEventListener('click', function () {
+//   var resizeControlsValue;
+//   resizeControlsValue = uploadResizeControlsValue - 25;
+//   effectImagePreview.setAttribute('style', 'transform: scale(resizeControlsValue / 100)');
+//   return resizeControlsValue;
+// });
