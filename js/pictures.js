@@ -145,7 +145,7 @@ var uploadFormDescription = document.querySelector('.upload-form-description');
 uploadImage.classList.add('hidden');
 uploadOverlay.classList.remove('hidden');
 
-uploadFile.addEventListener('input', function (evt) {
+uploadFile.addEventListener('change', function (evt) {
   if (!uploadFile.validity.valid) {
     uploadImage.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
@@ -166,7 +166,7 @@ uploadFormCancel.addEventListener('click', function () {
 
 uploadEffect.addEventListener('click', function (evt) {
   var elem = event.target;
-  if (elem === '#upload-effect-none') {
+  if (elem === document.querySelector('#upload-effect-none')) {
     effectImagePreview.classList.add('.effect-none');
   } else
   if (elem === document.querySelector('#upload-effect-chrome')) {
