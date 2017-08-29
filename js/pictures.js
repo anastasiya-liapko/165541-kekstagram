@@ -69,8 +69,104 @@ picturesList.appendChild(fragment);
 
 var renderGallery = function (picture) {
   galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
-  galleryOverlay.querySelector('.likes-count').textContent = picture.like;
+  galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
   galleryOverlay.querySelector('.comments-count').textContent = picture.comment;
   return galleryOverlay;
 };
-renderGallery(pictures[0]);
+
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
+// var setupOpen = document.querySelector('.picture');
+var setupClose = document.querySelector('.gallery-overlay-close');
+var openPicture = document.querySelector('.pictures');
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  galleryOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  galleryOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+openPicture.addEventListener('click', function () {
+  openPopup();
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+openPicture.onkeydown = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+};
+
+setupClose.onkeydown = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
+openPicture.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  var elem = event.target;
+  if (elem.hasAttribute('src')) {
+    var url = elem.getAttribute('src');
+    var index = urls.indexOf(url);
+    renderGallery(pictures[index]);
+  }
+});
+
+// var uploadSelectImage = document.forms[2];
+// var uploadFile = uploadSelectImage.elements[0];
+// var uploadImage = document.querySelector('.upload-image');
+// var uploadOverlay = document.querySelector('.upload-overlay');
+// var uploadFormCancel = uploadSelectImage.querySelector('.upload-form-cancel');
+// var uploadResizeControlsValue = uploadSelectImage.querySelector('.upload-resize-controls-value');
+// var uploadResizeControlsButtonDec = uploadSelectImage.querySelector('.upload-resize-controls-button-dec');
+// var uploadResizeControlsButtonInc = uploadSelectImage.querySelector('.upload-resize-controls-button-inc');
+// var effectImagePreview = uploadSelectImage.querySelector('.effect-image-preview');
+
+
+// uploadFile.addEventListener('invalid', function (evt) {
+//   if (uploadFile.validity.valid) {
+//     uploadImage.classList.add('hidden');
+//     uploadOverlay.classList.remove('hidden');
+//     document.addEventListener('keydown', function () {
+//       if (evt.keyCode === 27) {
+//         uploadOverlay.classList.add('hidden');
+//       }
+//     });
+//   } else {
+//     uploadFile.setCustomValidity('');
+//   }
+// });
+
+// uploadFormCancel.addEventListener('click', function () {
+//   uploadOverlay.classList.add('hidden');
+//   uploadImage.classList.remove('hidden');
+// });
+
+// uploadResizeControlsButtonDec.addEventListener('click', function () {
+//   var resizeControlsValue;
+//   resizeControlsValue = uploadResizeControlsValue + 25;
+//   effectImagePreview.setAttribute('style', 'transform: scale(resizeControlsValue / 100)');
+//   return resizeControlsValue;
+// });
+
+// uploadResizeControlsButtonInc.addEventListener('click', function () {
+//   var resizeControlsValue;
+//   resizeControlsValue = uploadResizeControlsValue - 25;
+//   effectImagePreview.setAttribute('style', 'transform: scale(resizeControlsValue / 100)');
+//   return resizeControlsValue;
+// });
