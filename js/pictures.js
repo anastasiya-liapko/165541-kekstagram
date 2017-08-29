@@ -69,17 +69,17 @@ picturesList.appendChild(fragment);
 
 var renderGallery = function (picture) {
   galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
-  galleryOverlay.querySelector('.likes-count').textContent = picture.like;
+  galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
   galleryOverlay.querySelector('.comments-count').textContent = picture.comment;
   return galleryOverlay;
 };
-// renderGallery(pictures[0]);
 
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
-var setupOpen = document.querySelector('.picture');
+// var setupOpen = document.querySelector('.picture');
 var setupClose = document.querySelector('.gallery-overlay-close');
+var openPicture = document.querySelector('.pictures');
 
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -97,7 +97,7 @@ var closePopup = function () {
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
-setupOpen.addEventListener('click', function () {
+openPicture.addEventListener('click', function () {
   openPopup();
 });
 
@@ -105,7 +105,7 @@ setupClose.addEventListener('click', function () {
   closePopup();
 });
 
-setupOpen.onkeydown = function (evt) {
+openPicture.onkeydown = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
   }
@@ -117,21 +117,15 @@ setupClose.onkeydown = function (evt) {
   }
 };
 
-setupOpen.addEventListener('click', function () {
-  var url = setupOpen.querySelector('img').src;
-  var index = urls.indexOf(url);
-  renderGallery(pictures[index]);
+openPicture.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  var elem = event.target;
+  if (elem.hasAttribute('src')) {
+    var url = elem.getAttribute('src');
+    var index = urls.indexOf(url);
+    renderGallery(pictures[index]);
+  }
 });
-
-
-// setupOpen.addEventListener('click', function () {
-//   var url = setupOpen.querySelector('img').src;
-//   for (i = 0; i < urls.length; i++) {
-//     if (url === urls[i]) {
-//       renderGallery(pictures[i]);
-//     }
-//   }
-// });
 
 // var uploadSelectImage = document.forms[2];
 // var uploadFile = uploadSelectImage.elements[0];
