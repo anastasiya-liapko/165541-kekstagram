@@ -142,16 +142,16 @@ var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
 
 var uploadFormDescription = document.querySelector('.upload-form-description');
 
-uploadImage.classList.add('hidden');
-uploadOverlay.classList.remove('hidden');
-
 uploadFile.addEventListener('change', function (evt) {
-  if (!uploadFile.validity.valid) {
+  if (uploadFile.validity.valid) {
     uploadImage.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
-    document.addEventListener('keydown', function () {
+    document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === 27) {
-        uploadOverlay.classList.add('hidden');
+        if (uploadFormDescription !== document.activeElement) {
+          uploadOverlay.classList.add('hidden');
+          uploadImage.classList.remove('hidden');
+        }
       }
     });
   } else {
@@ -166,23 +166,29 @@ uploadFormCancel.addEventListener('click', function () {
 
 uploadEffect.addEventListener('click', function (evt) {
   var elem = event.target;
+  effectImagePreview.classList.remove('effect-none');
+  effectImagePreview.classList.remove('effect-chrome');
+  effectImagePreview.classList.remove('effect-sepia');
+  effectImagePreview.classList.remove('effect-marvin');
+  effectImagePreview.classList.remove('effect-phobos');
+  effectImagePreview.classList.remove('effect-heat');
   if (elem === document.querySelector('#upload-effect-none')) {
-    effectImagePreview.classList.add('.effect-none');
+    effectImagePreview.classList.add('effect-none');
   } else
   if (elem === document.querySelector('#upload-effect-chrome')) {
-    effectImagePreview.classList.add('.effect-chrome');
+    effectImagePreview.classList.add('effect-chrome');
   } else
   if (elem === document.querySelector('#upload-effect-sepia')) {
-    effectImagePreview.classList.add('.effect-sepia');
+    effectImagePreview.classList.add('effect-sepia');
   } else
   if (elem === document.querySelector('#upload-effect-marvin')) {
-    effectImagePreview.classList.add('.effect-marvin');
+    effectImagePreview.classList.add('effect-marvin');
   } else
   if (elem === document.querySelector('#upload-effect-phobos')) {
-    effectImagePreview.classList.add('.effect-phobos');
+    effectImagePreview.classList.add('effect-phobos');
   } else
   if (elem === document.querySelector('#upload-effect-heat')) {
-    effectImagePreview.classList.add('.effect-heat');
+    effectImagePreview.classList.add('effect-heat');
   }
 });
 
@@ -190,8 +196,9 @@ uploadResizeControlsButtonDec.addEventListener('click', function () {
   var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
   if (resizeControlsValue <= 100 & resizeControlsValue > 25) {
     resizeControlsValue = +resizeControlsValue - 25;
+    var resizeControlsValueInPercent = resizeControlsValue / 100;
     uploadResizeControlsValue.setAttribute('value', resizeControlsValue);
-    effectImagePreview.setAttribute('style', 'transform: scale(resizeControlsValueInPercent)');
+    effectImagePreview.setAttribute('style', 'transform: scale(' + resizeControlsValueInPercent + ')');
   }
 });
 
@@ -199,8 +206,9 @@ uploadResizeControlsButtonInc.addEventListener('click', function () {
   var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
   if (resizeControlsValue < 100 & resizeControlsValue >= 25) {
     resizeControlsValue = +resizeControlsValue + 25;
+    var resizeControlsValueInPercent = resizeControlsValue / 100;
     uploadResizeControlsValue.setAttribute('value', resizeControlsValue);
-    effectImagePreview.setAttribute('style', 'transform: scale(resizeControlsValue / 100)');
+    effectImagePreview.setAttribute('style', 'transform: scale(' + resizeControlsValueInPercent + ')');
   }
 });
 
@@ -218,16 +226,71 @@ uploadFormDescription.addEventListener('invalid', function (evt) {
   }
 });
 
-uploadFormHashtags.addEventListener('invalid', function (evt) {
-  if (uploadFormHashtags.validity.PatternMismatch) {
-    uploadFormHashtags.setCustomValidity('Не соответствует паттерну');
+// uploadFormHashtags.addEventListener('invalid', function (evt) {
+//   if (uploadFormHashtags.validity.PatternMismatch) {
+//     uploadFormHashtags.setCustomValidity('Не соответствует паттерну');
+//     uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+//   } else
+//   if (uploadFormHashtags.validity.tooLong) {
+//     uploadFormHashtags.setCustomValidity('Больше максимальной длины');
+//     uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+//   } else {
+//     uploadFormDescription.setCustomValidity('');
+//     uploadFormDescription.setAttribute('style', 'box-shadow: none');
+//   }
+// });
+
+// var validateForm = function () {
+//   var hashtag = uploadFormHashtags.value;
+//   var hashtagArr = hashtag.split(', ');
+//   var hashtagLength = hashtagArr.length;
+//   for (var i = 0; i < hashtag.length; i++) {
+//     if (hashtagArr[i] === hashtagArr[i + 1]) {
+//       alert('Один и тот же хэш-тег не может быть использован дважды');
+//       return false;
+//     };
+//   if (hashtagArr > hashtagLength) {
+//     alert('Нельзя указать больше пяти хэш-тегов');
+//     return false;
+//   }
+//   if (hashtagArr[i].split('') > 20) {
+//     alert('Максимальная длина одного хэш-тега 20 символов');
+//     return false;
+//   }
+// };
+
+// uploadSelectImage.addEventListener('submit', function () {
+//   validateForm();
+// });
+
+uploadFormHashtags.addEventListener('input', function () {
+  var hashtag = uploadFormHashtags.value;
+  var hashtagArr = [];
+  hashtagArr = hashtag.split(', ');
+  var elemArr = [];
+  elemArr[i] = hashtagArr[i].split('');
+  for (i = 0; i < elemArr; i++) {
+    var elem = elemArr[i];
+    if (elem[0] !== #) {
+      uploadFormHashtags.setCustomValidity('Хэш-тег начинается с символа `#` (решётка)');
+      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+    }
+  }
+  for (i = 0; i < hashtagArr.length; i++) {
+    if (hashtagArr[i] === hashtagArr[i++]) {
+      uploadFormHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
+      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+    }
+  }
+  if (hashtagArr > 5) {
+    uploadFormHashtags.setCustomValidity('Нельзя указать больше пяти хэш-тегов');
     uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
-  } else
-  if (uploadFormHashtags.validity.tooLong) {
-    uploadFormHashtags.setCustomValidity('Больше максимальной длины');
+  }
+  if (hashtagArr[i].split('') > 20) {
+    uploadFormHashtags.setCustomValidity('Максимальная длина одного хэш-тега 20 символов');
     uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
   } else {
-    uploadFormDescription.setCustomValidity('');
-    uploadFormDescription.setAttribute('style', 'box-shadow: none');
+    uploadFormHashtags.setCustomValidity('');
+    uploadFormHashtags.setAttribute('style', 'box-shadow: none');
   }
 });
