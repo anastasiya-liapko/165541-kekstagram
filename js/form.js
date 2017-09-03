@@ -20,6 +20,7 @@
       if (uploadFormDescription !== document.activeElement) {
         uploadOverlay.classList.add('hidden');
         uploadImage.classList.remove('hidden');
+        document.removeEventListener('keydown', keydownHundler);
       }
     }
   };
@@ -32,11 +33,10 @@
     }
   });
 
-  document.removeEventListener('keydown', keydownHundler);
-
   uploadFormCancel.addEventListener('click', function () {
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
+    document.removeEventListener('keydown', keydownHundler);
   });
 
   uploadEffect.addEventListener('click', function (evt) {
