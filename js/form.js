@@ -1,16 +1,16 @@
 'use strict';
 
 (function () {
-  var uploadSelectImage = document.querySelector('.upload-form');
-  var uploadFile = uploadSelectImage.querySelector('#upload-file');
+  var form = document.querySelector('.upload-form');
+  var uploadFile = form.querySelector('#upload-file');
   var uploadImage = document.querySelector('.upload-image');
   var uploadOverlay = document.querySelector('.upload-overlay');
-  var uploadFormCancel = uploadSelectImage.querySelector('.upload-form-cancel');
+  var uploadFormCancel = form.querySelector('.upload-form-cancel');
   var uploadEffect = document.querySelector('.upload-effect-controls');
   var effectImagePreview = document.querySelector('.effect-image-preview');
-  var uploadResizeControlsValue = uploadSelectImage.querySelector('.upload-resize-controls-value');
-  var uploadResizeControlsButtonDec = uploadSelectImage.querySelector('.upload-resize-controls-button-dec');
-  var uploadResizeControlsButtonInc = uploadSelectImage.querySelector('.upload-resize-controls-button-inc');
+  var uploadResizeControlsValue = form.querySelector('.upload-resize-controls-value');
+  var uploadResizeControlsButtonDec = form.querySelector('.upload-resize-controls-button-dec');
+  var uploadResizeControlsButtonInc = form.querySelector('.upload-resize-controls-button-inc');
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
 
@@ -99,7 +99,7 @@
     }
   });
 
-  uploadSelectImage.addEventListener('submit', function (evt) {
+  form.addEventListener('submit', function (evt) {
     var a = true;
     var b = true;
     var c = true;
@@ -145,12 +145,13 @@
     if (pocket.length > 20) {
       e = false;
     }
-    if (uploadFormHashtags.valueMissing) {
-      uploadFormHashtags.setCustomValidity('');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: none');
-    } else if (a === true && b === true && c === true && d === true && e === true) {
-      uploadFormHashtags.setCustomValidity('');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: none');
+    if (a === true && b === true && c === true && d === true && e === true) {
+      window.backend.save(new FormData(form), function (response) {
+        uploadOverlay.classList.add('hidden');
+        uploadImage.classList.remove('hidden');
+        form.reset();
+      });
+      evt.preventDefault();
     } else if (a === false) {
       uploadFormHashtags.setCustomValidity('Хэш-тег начинается с символа `#` (решётка)');
       uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
