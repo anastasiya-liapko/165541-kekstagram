@@ -8,7 +8,7 @@
   var uploadEffect = document.querySelector('.upload-effect');
   var uploadControl = document.querySelector('.upload-control');
   var uploadOverlay = document.querySelector('.upload-overlay');
-  var uploadFormPreview = document.querySelector('.upload-form-preview');
+  // var uploadFormPreview = document.querySelector('.upload-form-preview');
 
   var onPopupEscPress = function (evt) {
     window.data.isEscEvent(evt, closePopup);
