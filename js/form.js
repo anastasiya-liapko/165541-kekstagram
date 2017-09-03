@@ -15,12 +15,16 @@
   var uploadFormDescription = document.querySelector('.upload-form-description');
   var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
 
+  var clickHundler = function () {
+    uploadOverlay.classList.add('hidden');
+    uploadImage.classList.remove('hidden');
+    document.removeEventListener('keydown', keydownHundler);
+  };
+
   var keydownHundler = function (evt) {
     if (evt.keyCode === 27) {
       if (uploadFormDescription !== document.activeElement) {
-        uploadOverlay.classList.add('hidden');
-        uploadImage.classList.remove('hidden');
-        document.removeEventListener('keydown', keydownHundler);
+        clickHundler();
       }
     }
   };
@@ -34,9 +38,7 @@
   });
 
   uploadFormCancel.addEventListener('click', function () {
-    uploadOverlay.classList.add('hidden');
-    uploadImage.classList.remove('hidden');
-    document.removeEventListener('keydown', keydownHundler);
+    clickHundler();
   });
 
   uploadEffect.addEventListener('click', function (evt) {
@@ -116,7 +118,7 @@
     hashtagArr = hashtag.split(' ');
     for (var i = 0; i < hashtagArr.length; i++) {
       var pocket = hashtagArr[i].split('');
-      if (pocket.length > 1 && pocket[0] !== '#') {
+      if (pocket.length >= 1 && pocket[0] !== '#') {
         sharp = false;
       }
     }
