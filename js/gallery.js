@@ -57,8 +57,8 @@
         y: moveEvt.clientY
       };
 
-      uploadEffect.style.top = (uploadEffect.offsetTop - shift.y) + 'px';
-      uploadEffect.style.left = (uploadEffect.offsetLeft - shift.x) + 'px';
+      drugPopup.style.top = (drugPopup.offsetTop - shift.y) + 'px';
+      drugPopup.style.left = (drugPopup.offsetLeft - shift.x) + 'px';
     };
 
     var onMouseUp = function (upEvt) {

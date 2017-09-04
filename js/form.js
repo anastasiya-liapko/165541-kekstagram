@@ -14,6 +14,9 @@
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
   var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
+  var dragPin = document.querySelector('.upload-effect-level-pin');
+  var dragVal = document.querySelector('.upload-effect-level-val');
+  var dragLevel = document.querySelector('.upload-effect-level-line');
 
   var clickHundler = function () {
     uploadOverlay.classList.add('hidden');
@@ -169,5 +172,36 @@
     } else if (!maxTwenty) {
       setError(evt, 'Максимальная длина одного хэш-тега 20 символов');
     }
+  });
+
+  dragPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var startCoords = {
+      x: evt.clientX
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+
+      startCoords = {
+        x: moveEvt.clientX
+      };
+
+      dragLevel.style.left = (dragLevel.offsetLeft - shift.x) + 'px';
+      dragVal.style.width = (dragVal.offsetWidth - shift.x) + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 })();
