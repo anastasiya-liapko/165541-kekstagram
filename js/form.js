@@ -1,40 +1,44 @@
 'use strict';
 
 (function () {
-  var uploadSelectImage = document.querySelector('.upload-form');
-  var uploadFile = uploadSelectImage.querySelector('#upload-file');
+  var form = document.querySelector('.upload-form');
+  var uploadFile = form.querySelector('#upload-file');
   var uploadImage = document.querySelector('.upload-image');
   var uploadOverlay = document.querySelector('.upload-overlay');
-  var uploadFormCancel = uploadSelectImage.querySelector('.upload-form-cancel');
+  var uploadFormCancel = form.querySelector('.upload-form-cancel');
   var uploadEffect = document.querySelector('.upload-effect-controls');
   var effectImagePreview = document.querySelector('.effect-image-preview');
-  var uploadResizeControlsValue = uploadSelectImage.querySelector('.upload-resize-controls-value');
-  var uploadResizeControlsButtonDec = uploadSelectImage.querySelector('.upload-resize-controls-button-dec');
-  var uploadResizeControlsButtonInc = uploadSelectImage.querySelector('.upload-resize-controls-button-inc');
+  var uploadResizeControlsValue = form.querySelector('.upload-resize-controls-value');
+  var uploadResizeControlsButtonDec = form.querySelector('.upload-resize-controls-button-dec');
+  var uploadResizeControlsButtonInc = form.querySelector('.upload-resize-controls-button-inc');
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
+  var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
 
+  var clickHundler = function () {
+    uploadOverlay.classList.add('hidden');
+    uploadImage.classList.remove('hidden');
+    document.removeEventListener('keydown', keydownHundler);
+  };
+
+  var keydownHundler = function (evt) {
+    if (evt.keyCode === 27) {
+      if (uploadFormDescription !== document.activeElement) {
+        clickHundler();
+      }
+    }
+  };
 
   uploadFile.addEventListener('change', function () {
-    if (uploadFile.validity.valid) {
+    if (uploadFile.validity.valid === true) {
       uploadImage.classList.add('hidden');
       uploadOverlay.classList.remove('hidden');
-      document.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === 27) {
-          if (uploadFormDescription !== document.activeElement) {
-            uploadOverlay.classList.add('hidden');
-            uploadImage.classList.remove('hidden');
-          }
-        }
-      });
-    } else {
-      uploadFile.setCustomValidity('');
+      document.addEventListener('keydown', keydownHundler);
     }
   });
 
   uploadFormCancel.addEventListener('click', function () {
-    uploadOverlay.classList.add('hidden');
-    uploadImage.classList.remove('hidden');
+    clickHundler();
   });
 
   uploadEffect.addEventListener('click', function (evt) {
@@ -65,23 +69,23 @@
     }
   });
 
+  var setResizeValue = function () {
+    var resizeControlsValueInPercent = resizeControlsValue / 100;
+    uploadResizeControlsValue.setAttribute('value', resizeControlsValue);
+    effectImagePreview.setAttribute('style', 'transform: scale(' + resizeControlsValueInPercent + ')');
+  };
+
   uploadResizeControlsButtonDec.addEventListener('click', function () {
-    var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
-    if (resizeControlsValue <= 100 & resizeControlsValue > 25) {
+    if (resizeControlsValue <= 100 && resizeControlsValue > 25) {
       resizeControlsValue = +resizeControlsValue - 25;
-      var resizeControlsValueInPercent = resizeControlsValue / 100;
-      uploadResizeControlsValue.setAttribute('value', resizeControlsValue);
-      effectImagePreview.setAttribute('style', 'transform: scale(' + resizeControlsValueInPercent + ')');
+      setResizeValue();
     }
   });
 
   uploadResizeControlsButtonInc.addEventListener('click', function () {
-    var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
-    if (resizeControlsValue < 100 & resizeControlsValue >= 25) {
+    if (resizeControlsValue < 100 && resizeControlsValue >= 25) {
       resizeControlsValue = +resizeControlsValue + 25;
-      var resizeControlsValueInPercent = resizeControlsValue / 100;
-      uploadResizeControlsValue.setAttribute('value', resizeControlsValue);
-      effectImagePreview.setAttribute('style', 'transform: scale(' + resizeControlsValueInPercent + ')');
+      setResizeValue();
     }
   });
 
@@ -89,8 +93,7 @@
     if (uploadFormDescription.validity.valueMissing) {
       uploadFormDescription.setCustomValidity('Обязательное поле');
       uploadFormDescription.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
-    } else
-    if (uploadFormDescription.validity.tooShort) {
+    } else if (uploadFormDescription.validity.tooShort) {
       uploadFormDescription.setCustomValidity('Слишком короткое значение');
       uploadFormDescription.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
     } else {
@@ -99,21 +102,25 @@
     }
   });
 
-  uploadSelectImage.addEventListener('submit', function (evt) {
-    var a = true;
-    var b = true;
-    var c = true;
-    var d = true;
-    var e = true;
+  var setError = function (evt, value) {
+    uploadFormHashtags.setCustomValidity(value);
+    uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+    evt.preventDefault();
+  };
+
+  form.addEventListener('submit', function (evt) {
+    var sharp = true;
+    var space = true;
+    var repeat = true;
+    var maxFive = true;
+    var maxTwenty = true;
     var hashtag = uploadFormHashtags.value;
     var hashtagArr = [];
     hashtagArr = hashtag.split(' ');
     for (var i = 0; i < hashtagArr.length; i++) {
       var pocket = hashtagArr[i].split('');
-      if (pocket.length > 1 && pocket[0] !== '#') {
-        a = false;
-      } else if (i === hashtagArr.length) {
-        break;
+      if (pocket.length >= 1 && pocket[0] !== '#') {
+        sharp = false;
       }
     }
     for (i = 0; i < hashtagArr.length; i++) {
@@ -123,54 +130,44 @@
         if (bag[j] === '#') {
           number = number + 1;
           if (number > 1) {
-            b = false;
+            space = false;
           }
-        } else if (i === hashtagArr.length) {
-          break;
         }
       }
     }
     for (i = 0; i < hashtagArr.length - 1; i++) {
       for (j = i + 1; j < hashtagArr.length; j++) {
         if (hashtagArr[i] === hashtagArr[j]) {
-          c = false;
-        } else if (i === hashtagArr.length) {
-          break;
+          repeat = false;
         }
       }
     }
     if (hashtagArr.length > 5) {
-      d = false;
+      maxFive = false;
     }
-    if (pocket.length > 20) {
-      e = false;
+    for (i = 0; i < hashtagArr.length; i++) {
+      pocket = hashtagArr[i].split('');
+      if (pocket.length > 20) {
+        maxTwenty = false;
+      }
     }
-    if (uploadFormHashtags.valueMissing) {
-      uploadFormHashtags.setCustomValidity('');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: none');
-    } else if (a === true && b === true && c === true && d === true && e === true) {
-      uploadFormHashtags.setCustomValidity('');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: none');
-    } else if (a === false) {
-      uploadFormHashtags.setCustomValidity('Хэш-тег начинается с символа `#` (решётка)');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+    if (sharp && space && repeat && maxFive && maxTwenty) {
+      window.backend.save(new FormData(form), function (response) {
+        uploadOverlay.classList.add('hidden');
+        uploadImage.classList.remove('hidden');
+        form.reset();
+      });
       evt.preventDefault();
-    } else if (b === false) {
-      uploadFormHashtags.setCustomValidity('хэш-теги разделяются пробелами');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
-      evt.preventDefault();
-    } else if (c === false) {
-      uploadFormHashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
-      evt.preventDefault();
-    } else if (d === false) {
-      uploadFormHashtags.setCustomValidity('Нельзя указать больше пяти хэш-тегов');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
-      evt.preventDefault();
-    } else if (e === false) {
-      uploadFormHashtags.setCustomValidity('Максимальная длина одного хэш-тега 20 символов');
-      uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
-      evt.preventDefault();
+    } else if (!sharp) {
+      setError(evt, 'Хэш-тег начинается с символа `#` (решётка)');
+    } else if (!space) {
+      setError(evt, 'хэш-теги разделяются пробелами');
+    } else if (!repeat) {
+      setError(evt, 'Один и тот же хэш-тег не может быть использован дважды');
+    } else if (!maxFive) {
+      setError(evt, 'Нельзя указать больше пяти хэш-тегов');
+    } else if (!maxTwenty) {
+      setError(evt, 'Максимальная длина одного хэш-тега 20 символов');
     }
   });
 })();
