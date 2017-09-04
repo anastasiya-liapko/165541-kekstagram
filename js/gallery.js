@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function (data) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
@@ -11,7 +11,7 @@
   // var uploadFormPreview = document.querySelector('.upload-form-preview');
 
   var onPopupEscPress = function (evt) {
-    window.data.isEscEvent(evt, closePopup);
+    data.isEscEvent(evt, closePopup);
   };
 
   var openPopup = function () {
@@ -33,7 +33,7 @@
   });
 
   setupClose.onkeydown = function (evt) {
-    window.data.isEnterEvent(evt, closePopup);
+    data.isEnterEvent(evt, closePopup);
   };
 
   drugPopup.addEventListener('mousedown', function (evt) {
@@ -94,5 +94,5 @@
     evt.preventDefault();
   });
 
-})();
+})(window.data);
 

@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function (backend) {
   var form = document.querySelector('.upload-form');
   var uploadFile = form.querySelector('#upload-file');
   var uploadImage = document.querySelector('.upload-image');
@@ -14,9 +14,7 @@
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
   var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
-  var dragPin = document.querySelector('.upload-effect-level-pin');
-  var dragVal = document.querySelector('.upload-effect-level-val');
-  var dragLevel = document.querySelector('.upload-effect-level-line');
+
 
   var clickHundler = function () {
     uploadOverlay.classList.add('hidden');
@@ -155,7 +153,7 @@
       }
     }
     if (sharp && space && repeat && maxFive && maxTwenty) {
-      window.backend.save(new FormData(form), function (response) {
+      backend.save(new FormData(form), function (response) {
         uploadOverlay.classList.add('hidden');
         uploadImage.classList.remove('hidden');
         form.reset();
@@ -174,11 +172,58 @@
     }
   });
 
-  dragPin.addEventListener('mousedown', function (evt) {
+
+  var thumbElem = document.querySelector('.upload-effect-level-pin');
+  var sliderLine = document.querySelector('.upload-effect-level-val');
+  var sliderElem = document.querySelector('.upload-effect-level-line');
+
+  // thumbElem.onmousedown = function (evt) {
+  //   var thumbCoords = getCoords(thumbElem);
+  //   var shiftX = evt.pageX - thumbCoords.left;
+
+  //   var sliderCoords = getCoords(sliderElem);
+
+  //   document.onmousemove = function () {
+  //     var newLeft = evt.pageX - shiftX - sliderCoords.left;
+
+  //     if (newLeft < 0) {
+  //       newLeft = 0;
+  //     }
+  //     var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
+  //     if (newLeft > rightEdge) {
+  //       newLeft = rightEdge;
+  //     }
+
+  //     thumbElem.style.left = newLeft + 'px';
+  //   };
+
+  //   document.onmouseup = function () {
+  //     document.onmousemove = document.onmouseup = null;
+  //   };
+
+  //   return false;
+  // };
+
+  // thumbElem.ondragstart = function () {
+  //   return false;
+  // };
+
+  // function getCoords(elem) {
+  //   var box = elem.getBoundingClientRect();
+
+  //   return {
+  //     top: box.top + pageYOffset,
+  //     left: box.left + pageXOffset
+  //   };
+  // }
+
+  thumbElem.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var startCoords = {
       x: evt.clientX
     };
+
+    var sliderCoords = getCoords(sliderElem);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
@@ -190,8 +235,8 @@
         x: moveEvt.clientX
       };
 
-      dragLevel.style.left = (dragLevel.offsetLeft - shift.x) + 'px';
-      dragVal.style.width = (dragVal.offsetWidth - shift.x) + 'px';
+      thumbElem.style.left = (thumbElem.offsetLeft - shift.x) + 'px';
+      sliderLine.style.width = (sliderLine.offsetWidth - shift.x) + 'px';
     };
 
     var onMouseUp = function (upEvt) {
@@ -203,5 +248,15 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+
+    function getCoords(elem) {
+      var box = elem.getBoundingClientRect();
+
+      return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset
+      };
+
+    }
   });
-})();
+})(window.backend);

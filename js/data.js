@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.data = (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
 
@@ -10,7 +10,7 @@
     'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
-  window.data = {
+  return {
     getUrls: function (min, max) {
       var urls = [];
       for (var i = 0; i < max; i++) {

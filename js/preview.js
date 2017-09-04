@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function (backend) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var openPicture = document.querySelector('.pictures');
 
@@ -20,7 +20,7 @@
     if (elem.hasAttribute('src')) {
       url = elem.getAttribute('src');
     }
-    window.backend.load(function (picture) {
+    backend.load(function (picture) {
       for (i = 0; i < picture.length; i++) {
         if (picture[i].url === url) {
           index = i;
@@ -29,7 +29,7 @@
       renderGallery(picture[index]);
     });
   });
-})();
+})(window.backend);
 
   // var urls = window.data.getUrls(1, 25);
   // var likes = window.data.getLikes(15, 200);
