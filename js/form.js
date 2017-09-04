@@ -102,9 +102,10 @@
     }
   });
 
-  var setError = function (value) {
+  var setError = function (evt, value) {
     uploadFormHashtags.setCustomValidity(value);
     uploadFormHashtags.setAttribute('style', 'box-shadow: 0 0 0 3px rgb(255, 0, 0)');
+    evt.preventDefault();
   };
 
   form.addEventListener('submit', function (evt) {
@@ -158,20 +159,15 @@
       });
       evt.preventDefault();
     } else if (!sharp) {
-      setError('Хэш-тег начинается с символа `#` (решётка)');
-      evt.preventDefault();
+      setError(evt, 'Хэш-тег начинается с символа `#` (решётка)');
     } else if (!space) {
-      setError('хэш-теги разделяются пробелами');
-      evt.preventDefault();
+      setError(evt, 'хэш-теги разделяются пробелами');
     } else if (!repeat) {
-      setError('Один и тот же хэш-тег не может быть использован дважды');
-      evt.preventDefault();
+      setError(evt, 'Один и тот же хэш-тег не может быть использован дважды');
     } else if (!maxFive) {
-      setError('Нельзя указать больше пяти хэш-тегов');
-      evt.preventDefault();
+      setError(evt, 'Нельзя указать больше пяти хэш-тегов');
     } else if (!maxTwenty) {
-      setError('Максимальная длина одного хэш-тега 20 символов');
-      evt.preventDefault();
+      setError(evt, 'Максимальная длина одного хэш-тега 20 символов');
     }
   });
 })();
