@@ -41,9 +41,3 @@
   // var likes = window.data.getLikes(15, 200);
   // var comments = window.data.getComments();
   // var pictures = window.data.createPictures(urls, likes, comments);
-
-  // var fragment = document.createDocumentFragment();
-  // for (var i = 0; i < pictures.length; i++) {
-  //   fragment.appendChild(renderPictures(pictures[i]));
-  // }
-  // picturesList.appendChild(fragment);
