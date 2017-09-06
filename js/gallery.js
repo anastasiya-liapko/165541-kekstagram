@@ -1,14 +1,21 @@
 'use strict';
 
-(function (data) {
+(function (preview, data) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
-  var drugPopup = document.querySelector('.effect-image-preview');
-  var uploadEffect = document.querySelector('.upload-effect');
-  var uploadControl = document.querySelector('.upload-control');
-  var uploadOverlay = document.querySelector('.upload-overlay');
-  // var uploadFormPreview = document.querySelector('.upload-form-preview');
+
+  var renderGallery = function (picture) {
+    galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
+    galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
+    galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
+    return galleryOverlay;
+  };
+
+  openPicture.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    preview.gallery(renderGallery);
+  });
 
   var onPopupEscPress = function (evt) {
     data.isEscEvent(evt, closePopup);
@@ -35,64 +42,62 @@
   setupClose.onkeydown = function (evt) {
     data.isEnterEvent(evt, closePopup);
   };
+  // drugPopup.addEventListener('mousedown', function (evt) {
+  //   evt.preventDefault();
 
-  drugPopup.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+  //   var startCoords = {
+  //     x: evt.clientX,
+  //     y: evt.clientY
+  //   };
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+  //   var onMouseMove = function (moveEvt) {
+  //     moveEvt.preventDefault();
 
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
+  //     var shift = {
+  //       x: startCoords.x - moveEvt.clientX,
+  //       y: startCoords.y - moveEvt.clientY
+  //     };
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+  //     startCoords = {
+  //       x: moveEvt.clientX,
+  //       y: moveEvt.clientY
+  //     };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+  //     drugPopup.style.top = (drugPopup.offsetTop - shift.y) + 'px';
+  //     drugPopup.style.left = (drugPopup.offsetLeft - shift.x) + 'px';
+  //   };
 
-      drugPopup.style.top = (drugPopup.offsetTop - shift.y) + 'px';
-      drugPopup.style.left = (drugPopup.offsetLeft - shift.x) + 'px';
-    };
+  //   var onMouseUp = function (upEvt) {
+  //     upEvt.preventDefault();
 
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
+  //     document.removeEventListener('mousemove', onMouseMove);
+  //     document.removeEventListener('mouseUp', onMouseUp);
+  //   };
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseUp', onMouseUp);
-    };
+  //   document.addEventListener('mousemove', onMouseMove);
+  //   document.addEventListener('mouseup', onMouseUp);
+  // });
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
+  // uploadControl.addEventListener('dragover', function (evt) {
+  //   evt.preventDefault();
+  //   return false;
+  // });
 
-  uploadControl.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-    return false;
-  });
+  // uploadControl.addEventListener('drop', function (evt) {
+  //   evt.target.style.backgroundColor = '';
+  //   // uploadFormPreview.replaceChild(draggedItem, drugPopup);
+  //   uploadOverlay.classList.remove('hidden');
+  //   evt.preventDefault();
+  // });
 
-  uploadControl.addEventListener('drop', function (evt) {
-    evt.target.style.backgroundColor = '';
-    // uploadFormPreview.replaceChild(draggedItem, drugPopup);
-    uploadOverlay.classList.remove('hidden');
-    evt.preventDefault();
-  });
+  // uploadControl.addEventListener('dragenter', function (evt) {
+  //   evt.target.style.backgroundColor = 'white';
+  //   evt.preventDefault();
+  // });
 
-  uploadControl.addEventListener('dragenter', function (evt) {
-    evt.target.style.backgroundColor = 'white';
-    evt.preventDefault();
-  });
+  // uploadControl.addEventListener('dragleave', function (evt) {
+  //   evt.target.style.backgroundColor = '';
+  //   evt.preventDefault();
+  // });
 
-  uploadControl.addEventListener('dragleave', function (evt) {
-    evt.target.style.backgroundColor = '';
-    evt.preventDefault();
-  });
-
-})(window.data);
-
+})(window.preview, window.data);

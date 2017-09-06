@@ -1,6 +1,6 @@
 'use strict';
 
-(function (backend) {
+window.picture = (function (backend) {
   var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
   document.querySelector('.upload-overlay').classList.add('hidden');
   var picturesList = document.querySelector('.pictures');
@@ -36,6 +36,7 @@
 
   backend.load(successHandler, errorHandler);
 })(window.backend);
+
 
   // var urls = window.data.getUrls(1, 25);
   // var likes = window.data.getLikes(15, 200);

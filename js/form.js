@@ -14,7 +14,10 @@
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
   var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
-
+  var thumbElem = document.querySelector('.upload-effect-level-pin');
+  var sliderLine = document.querySelector('.upload-effect-level-val');
+  var sliderElem = document.querySelector('.upload-effect-level-line');
+  var effectControls = document.querySelector('.upload-effect-level');
 
   var clickHundler = function () {
     uploadOverlay.classList.add('hidden');
@@ -42,33 +45,106 @@
     clickHundler();
   });
 
+  effectControls.classList.add('hidden');
+
   uploadEffect.addEventListener('click', function (evt) {
-    var elem = event.target;
-    effectImagePreview.classList.remove('effect-none');
-    effectImagePreview.classList.remove('effect-chrome');
-    effectImagePreview.classList.remove('effect-sepia');
-    effectImagePreview.classList.remove('effect-marvin');
-    effectImagePreview.classList.remove('effect-phobos');
-    effectImagePreview.classList.remove('effect-heat');
+    var elem = evt.target;
+    if (elem !== effectControls && elem !== sliderElem && elem !== sliderLine && elem !== thumbElem) {
+      effectImagePreview.classList.remove('effect-none');
+      effectImagePreview.classList.remove('effect-chrome');
+      effectImagePreview.classList.remove('effect-sepia');
+      effectImagePreview.classList.remove('effect-marvin');
+      effectImagePreview.classList.remove('effect-phobos');
+      effectImagePreview.classList.remove('effect-heat');
+      effectImagePreview.style.filter = '';
+    }
+
     if (elem === document.querySelector('#upload-effect-none')) {
       effectImagePreview.classList.add('effect-none');
+      effectControls.classList.add('hidden');
     } else
     if (elem === document.querySelector('#upload-effect-chrome')) {
       effectImagePreview.classList.add('effect-chrome');
+      effectControls.classList.remove('hidden');
     } else
     if (elem === document.querySelector('#upload-effect-sepia')) {
       effectImagePreview.classList.add('effect-sepia');
+      effectControls.classList.remove('hidden');
     } else
     if (elem === document.querySelector('#upload-effect-marvin')) {
       effectImagePreview.classList.add('effect-marvin');
+      effectControls.classList.remove('hidden');
     } else
     if (elem === document.querySelector('#upload-effect-phobos')) {
       effectImagePreview.classList.add('effect-phobos');
+      effectControls.classList.remove('hidden');
     } else
     if (elem === document.querySelector('#upload-effect-heat')) {
       effectImagePreview.classList.add('effect-heat');
+      effectControls.classList.remove('hidden');
     }
   });
+
+  thumbElem.onmousedown = function (evt) {
+    var thumbCoords = getCoords(thumbElem);
+    var shiftX = evt.pageX - thumbCoords.left;
+
+    var sliderCoords = getCoords(sliderElem);
+
+    document.onmousemove = function (moveEvt) {
+      var newLeft = moveEvt.pageX - shiftX - sliderCoords.left;
+
+      if (newLeft < 0) {
+        newLeft = 0;
+      }
+      var rightEdge = sliderElem.offsetWidth;
+      if (newLeft > rightEdge) {
+        newLeft = rightEdge;
+      }
+
+      thumbElem.style.left = newLeft + 'px';
+      sliderLine.style.width = newLeft + 'px';
+
+      var sliderCoordsLeft = sliderCoords.left;
+
+      var effectValue = (newLeft + sliderCoordsLeft) / rightEdge;
+      if (effectImagePreview.classList.contains('effect-chrome')) {
+        var effectValueChrome = effectValue * 1;
+        effectImagePreview.setAttribute('style', 'filter: grayscale(' + effectValueChrome + ')');
+      } else if (effectImagePreview.classList.contains('effect-sepia')) {
+        var effectValueSepia = effectValue * 1;
+        effectImagePreview.setAttribute('style', 'filter: sepia(' + effectValueSepia + ')');
+      } else if (effectImagePreview.classList.contains('effect-marvin')) {
+        var effectValueMarvin = effectValue * 100;
+        effectImagePreview.setAttribute('style', 'filter: invert(' + effectValueMarvin + '%)');
+      } else if (effectImagePreview.classList.contains('effect-phobos')) {
+        var effectValuePhobos = effectValue * 3;
+        effectImagePreview.setAttribute('style', 'filter: blur(' + effectValuePhobos + 'px)');
+      } else if (effectImagePreview.classList.contains('effect-heat')) {
+        var effectValueHeat = effectValue * 3;
+        effectImagePreview.setAttribute('style', 'filter: brightness(' + effectValueHeat + ')');
+      }
+    };
+
+    document.onmouseup = function () {
+      document.onmousemove = document.onmouseup = null;
+    };
+
+    return false;
+  };
+
+  thumbElem.ondragstart = function () {
+    return false;
+  };
+
+  function getCoords(elem) {
+    var box = elem.getBoundingClientRect();
+
+    return {
+      top: box.top + pageYOffset,
+      left: box.left + pageXOffset
+    };
+  }
 
   var setResizeValue = function () {
     var resizeControlsValueInPercent = resizeControlsValue / 100;
@@ -169,94 +245,6 @@
       setError(evt, 'Нельзя указать больше пяти хэш-тегов');
     } else if (!maxTwenty) {
       setError(evt, 'Максимальная длина одного хэш-тега 20 символов');
-    }
-  });
-
-
-  var thumbElem = document.querySelector('.upload-effect-level-pin');
-  var sliderLine = document.querySelector('.upload-effect-level-val');
-  var sliderElem = document.querySelector('.upload-effect-level-line');
-
-  // thumbElem.onmousedown = function (evt) {
-  //   var thumbCoords = getCoords(thumbElem);
-  //   var shiftX = evt.pageX - thumbCoords.left;
-
-  //   var sliderCoords = getCoords(sliderElem);
-
-  //   document.onmousemove = function () {
-  //     var newLeft = evt.pageX - shiftX - sliderCoords.left;
-
-  //     if (newLeft < 0) {
-  //       newLeft = 0;
-  //     }
-  //     var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
-  //     if (newLeft > rightEdge) {
-  //       newLeft = rightEdge;
-  //     }
-
-  //     thumbElem.style.left = newLeft + 'px';
-  //   };
-
-  //   document.onmouseup = function () {
-  //     document.onmousemove = document.onmouseup = null;
-  //   };
-
-  //   return false;
-  // };
-
-  // thumbElem.ondragstart = function () {
-  //   return false;
-  // };
-
-  // function getCoords(elem) {
-  //   var box = elem.getBoundingClientRect();
-
-  //   return {
-  //     top: box.top + pageYOffset,
-  //     left: box.left + pageXOffset
-  //   };
-  // }
-
-  thumbElem.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-    var startCoords = {
-      x: evt.clientX
-    };
-
-    var sliderCoords = getCoords(sliderElem);
-
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      var shift = {
-        x: startCoords.x - moveEvt.clientX
-      };
-
-      startCoords = {
-        x: moveEvt.clientX
-      };
-
-      thumbElem.style.left = (thumbElem.offsetLeft - shift.x) + 'px';
-      sliderLine.style.width = (sliderLine.offsetWidth - shift.x) + 'px';
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-    function getCoords(elem) {
-      var box = elem.getBoundingClientRect();
-
-      return {
-        top: box.top + pageYOffset,
-        left: box.left + pageXOffset
-      };
-
     }
   });
 })(window.backend);
