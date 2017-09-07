@@ -17,15 +17,15 @@ window.initializeFilters = (function () {
         oldEffect.forEach(function (item, i) {
           image.classList.remove('effect-' + item);
         });
+        image.style.filter = '';
         image.classList.add('effect-' + newEffect);
         controlsContainer.classList.remove('hidden');
       };
       for (var i = 0; i < oldEffect.length; i++) {
         if (elem === document.querySelector('#upload-effect-' + oldEffect[i])) {
           newEffect = oldEffect[i];
-          image.style.filter = '';
+          changeEffect();
         }
-        changeEffect();
       }
       if (elem === document.querySelector('#upload-effect-' + oldEffect[0])) {
         controlsContainer.classList.add('hidden');
