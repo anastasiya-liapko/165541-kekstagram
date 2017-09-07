@@ -1,21 +1,13 @@
 'use strict';
 
-(function (preview, data) {
+(function (preview, picture, data) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
 
-  var renderGallery = function (picture) {
-    galleryOverlay.querySelector('.gallery-overlay-image').src = picture.url;
-    galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
-    galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
-    return galleryOverlay;
-  };
-
-  openPicture.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    preview.gallery(renderGallery);
-  });
+  var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
+  document.querySelector('.upload-overlay').classList.add('hidden');
+  var picturesList = document.querySelector('.pictures');
 
   var onPopupEscPress = function (evt) {
     data.isEscEvent(evt, closePopup);
@@ -31,7 +23,8 @@
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
-  openPicture.addEventListener('click', function () {
+  openPicture.addEventListener('click', function (evt) {
+    evt.preventDefault();
     openPopup();
   });
 
@@ -42,6 +35,25 @@
   setupClose.onkeydown = function (evt) {
     data.isEnterEvent(evt, closePopup);
   };
+
+  var renderGallery = function (image) {
+    galleryOverlay.querySelector('.gallery-overlay-image').src = image.url;
+    galleryOverlay.querySelector('.likes-count').textContent = image.likes;
+    galleryOverlay.querySelector('.comments-count').textContent = image.comments.length;
+    return galleryOverlay;
+  };
+  preview.bigImage(openPicture, renderGallery);
+
+  var renderPictures = function (image) {
+    var picturesElement = pictureTemplate.cloneNode(true);
+    picturesElement.querySelector('img').src = image.url;
+    picturesElement.querySelector('.picture-likes').textContent = image.like;
+    picturesElement.querySelector('.picture-comments').textContent = image.comment;
+    return picturesElement;
+  };
+  picture.image(picturesList, renderPictures);
+})(window.preview, window.picture, window.data);
+
   // drugPopup.addEventListener('mousedown', function (evt) {
   //   evt.preventDefault();
 
@@ -100,4 +112,4 @@
   //   evt.preventDefault();
   // });
 
-})(window.preview, window.data);
+

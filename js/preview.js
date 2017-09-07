@@ -1,31 +1,32 @@
 'use strict';
 
 window.preview = (function (backend) {
-  var openImage = function (renderGallery) {
-    var elem = event.target;
-    var url;
-    var index;
-    var i;
-    if (elem.hasAttribute('src')) {
-      url = elem.getAttribute('src');
-    }
-    backend.load(function (picture) {
-      for (i = 0; i < picture.length; i++) {
-        if (picture[i].url === url) {
-          index = i;
-        }
+  var openImage = function (image, action) {
+    image.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      var elem = event.target;
+      var url;
+      if (elem.hasAttribute('src')) {
+        url = elem.getAttribute('src');
       }
-      renderGallery(picture[index]);
+      backend.load(function (picture) {
+        for (var i = 0; i < picture.length; i++) {
+          var pictureUrl = picture[i].url;
+          if (pictureUrl === url) {
+            var index = i;
+          }
+        }
+        action(picture[index]);
+      });
     });
   };
 
   return {
-    gallery: function (renderGallery) {
-      openImage(renderGallery);
+    bigImage: function (image, action) {
+      openImage(image, action);
     }
   };
 })(window.backend);
-
 
 // window.preview = (function (backend) {
 //   var galleryOverlay = document.querySelector('.gallery-overlay');
