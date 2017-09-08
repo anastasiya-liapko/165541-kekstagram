@@ -1,6 +1,6 @@
 'use strict';
 
-(function (backend) {
+(function (backend, initializeFilters, initializeScale) {
   var form = document.querySelector('.upload-form');
   var uploadFile = form.querySelector('#upload-file');
   var uploadImage = document.querySelector('.upload-image');
@@ -9,12 +9,13 @@
   var uploadEffect = document.querySelector('.upload-effect-controls');
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var uploadResizeControlsValue = form.querySelector('.upload-resize-controls-value');
-  var uploadResizeControlsButtonDec = form.querySelector('.upload-resize-controls-button-dec');
-  var uploadResizeControlsButtonInc = form.querySelector('.upload-resize-controls-button-inc');
+  var uploadResizeControls = form.querySelector('.upload-resize-controls');
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
-  var resizeControlsValue = uploadResizeControlsValue.getAttribute('value');
-
+  var thumbElem = document.querySelector('.upload-effect-level-pin');
+  var sliderLine = document.querySelector('.upload-effect-level-val');
+  var sliderElem = document.querySelector('.upload-effect-level-line');
+  var effectControls = document.querySelector('.upload-effect-level');
 
   var clickHundler = function () {
     uploadOverlay.classList.add('hidden');
@@ -42,53 +43,14 @@
     clickHundler();
   });
 
-  uploadEffect.addEventListener('click', function (evt) {
-    var elem = event.target;
-    effectImagePreview.classList.remove('effect-none');
-    effectImagePreview.classList.remove('effect-chrome');
-    effectImagePreview.classList.remove('effect-sepia');
-    effectImagePreview.classList.remove('effect-marvin');
-    effectImagePreview.classList.remove('effect-phobos');
-    effectImagePreview.classList.remove('effect-heat');
-    if (elem === document.querySelector('#upload-effect-none')) {
-      effectImagePreview.classList.add('effect-none');
-    } else
-    if (elem === document.querySelector('#upload-effect-chrome')) {
-      effectImagePreview.classList.add('effect-chrome');
-    } else
-    if (elem === document.querySelector('#upload-effect-sepia')) {
-      effectImagePreview.classList.add('effect-sepia');
-    } else
-    if (elem === document.querySelector('#upload-effect-marvin')) {
-      effectImagePreview.classList.add('effect-marvin');
-    } else
-    if (elem === document.querySelector('#upload-effect-phobos')) {
-      effectImagePreview.classList.add('effect-phobos');
-    } else
-    if (elem === document.querySelector('#upload-effect-heat')) {
-      effectImagePreview.classList.add('effect-heat');
-    }
-  });
+  effectControls.classList.add('hidden');
+  initializeFilters.createEffect(uploadEffect, effectImagePreview, effectControls, thumbElem, sliderElem, sliderLine);
 
-  var setResizeValue = function () {
-    var resizeControlsValueInPercent = resizeControlsValue / 100;
-    uploadResizeControlsValue.setAttribute('value', resizeControlsValue);
-    effectImagePreview.setAttribute('style', 'transform: scale(' + resizeControlsValueInPercent + ')');
+  var adjustScale = function (value) {
+    effectImagePreview.style.transform = 'scale(' + value / 100 + ')';
   };
 
-  uploadResizeControlsButtonDec.addEventListener('click', function () {
-    if (resizeControlsValue <= 100 && resizeControlsValue > 25) {
-      resizeControlsValue = +resizeControlsValue - 25;
-      setResizeValue();
-    }
-  });
-
-  uploadResizeControlsButtonInc.addEventListener('click', function () {
-    if (resizeControlsValue < 100 && resizeControlsValue >= 25) {
-      resizeControlsValue = +resizeControlsValue + 25;
-      setResizeValue();
-    }
-  });
+  window.initializeScale.setSize(uploadResizeControls, uploadResizeControlsValue, adjustScale);
 
   uploadFormDescription.addEventListener('invalid', function (evt) {
     if (uploadFormDescription.validity.valueMissing) {
@@ -171,92 +133,4 @@
       setError(evt, 'Максимальная длина одного хэш-тега 20 символов');
     }
   });
-
-
-  var thumbElem = document.querySelector('.upload-effect-level-pin');
-  var sliderLine = document.querySelector('.upload-effect-level-val');
-  var sliderElem = document.querySelector('.upload-effect-level-line');
-
-  // thumbElem.onmousedown = function (evt) {
-  //   var thumbCoords = getCoords(thumbElem);
-  //   var shiftX = evt.pageX - thumbCoords.left;
-
-  //   var sliderCoords = getCoords(sliderElem);
-
-  //   document.onmousemove = function () {
-  //     var newLeft = evt.pageX - shiftX - sliderCoords.left;
-
-  //     if (newLeft < 0) {
-  //       newLeft = 0;
-  //     }
-  //     var rightEdge = sliderElem.offsetWidth - thumbElem.offsetWidth;
-  //     if (newLeft > rightEdge) {
-  //       newLeft = rightEdge;
-  //     }
-
-  //     thumbElem.style.left = newLeft + 'px';
-  //   };
-
-  //   document.onmouseup = function () {
-  //     document.onmousemove = document.onmouseup = null;
-  //   };
-
-  //   return false;
-  // };
-
-  // thumbElem.ondragstart = function () {
-  //   return false;
-  // };
-
-  // function getCoords(elem) {
-  //   var box = elem.getBoundingClientRect();
-
-  //   return {
-  //     top: box.top + pageYOffset,
-  //     left: box.left + pageXOffset
-  //   };
-  // }
-
-  thumbElem.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-    var startCoords = {
-      x: evt.clientX
-    };
-
-    var sliderCoords = getCoords(sliderElem);
-
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      var shift = {
-        x: startCoords.x - moveEvt.clientX
-      };
-
-      startCoords = {
-        x: moveEvt.clientX
-      };
-
-      thumbElem.style.left = (thumbElem.offsetLeft - shift.x) + 'px';
-      sliderLine.style.width = (sliderLine.offsetWidth - shift.x) + 'px';
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-    function getCoords(elem) {
-      var box = elem.getBoundingClientRect();
-
-      return {
-        top: box.top + pageYOffset,
-        left: box.left + pageXOffset
-      };
-
-    }
-  });
-})(window.backend);
+})(window.backend, window.initializeFilters, window.initializeScale);

@@ -1,14 +1,13 @@
 'use strict';
 
-(function (data) {
+(function (preview, picture, data) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
-  var drugPopup = document.querySelector('.effect-image-preview');
-  var uploadEffect = document.querySelector('.upload-effect');
-  var uploadControl = document.querySelector('.upload-control');
-  var uploadOverlay = document.querySelector('.upload-overlay');
-  // var uploadFormPreview = document.querySelector('.upload-form-preview');
+
+  var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
+  document.querySelector('.upload-overlay').classList.add('hidden');
+  var picturesList = document.querySelector('.pictures');
 
   var onPopupEscPress = function (evt) {
     data.isEscEvent(evt, closePopup);
@@ -24,7 +23,8 @@
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
-  openPicture.addEventListener('click', function () {
+  openPicture.addEventListener('click', function (evt) {
+    evt.preventDefault();
     openPopup();
   });
 
@@ -36,63 +36,80 @@
     data.isEnterEvent(evt, closePopup);
   };
 
-  drugPopup.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+  var renderGallery = function (image) {
+    galleryOverlay.querySelector('.gallery-overlay-image').src = image.url;
+    galleryOverlay.querySelector('.likes-count').textContent = image.likes;
+    galleryOverlay.querySelector('.comments-count').textContent = image.comments.length;
+    return galleryOverlay;
+  };
+  preview.bigImage(openPicture, renderGallery);
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+  var renderPictures = function (image) {
+    var picturesElement = pictureTemplate.cloneNode(true);
+    picturesElement.querySelector('img').src = image.url;
+    picturesElement.querySelector('.picture-likes').textContent = image.like;
+    picturesElement.querySelector('.picture-comments').textContent = image.comment;
+    return picturesElement;
+  };
+  picture.image(picturesList, renderPictures);
+})(window.preview, window.picture, window.data);
 
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
+  // drugPopup.addEventListener('mousedown', function (evt) {
+  //   evt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+  //   var startCoords = {
+  //     x: evt.clientX,
+  //     y: evt.clientY
+  //   };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+  //   var onMouseMove = function (moveEvt) {
+  //     moveEvt.preventDefault();
 
-      drugPopup.style.top = (drugPopup.offsetTop - shift.y) + 'px';
-      drugPopup.style.left = (drugPopup.offsetLeft - shift.x) + 'px';
-    };
+  //     var shift = {
+  //       x: startCoords.x - moveEvt.clientX,
+  //       y: startCoords.y - moveEvt.clientY
+  //     };
 
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
+  //     startCoords = {
+  //       x: moveEvt.clientX,
+  //       y: moveEvt.clientY
+  //     };
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseUp', onMouseUp);
-    };
+  //     drugPopup.style.top = (drugPopup.offsetTop - shift.y) + 'px';
+  //     drugPopup.style.left = (drugPopup.offsetLeft - shift.x) + 'px';
+  //   };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
+  //   var onMouseUp = function (upEvt) {
+  //     upEvt.preventDefault();
 
-  uploadControl.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-    return false;
-  });
+  //     document.removeEventListener('mousemove', onMouseMove);
+  //     document.removeEventListener('mouseUp', onMouseUp);
+  //   };
 
-  uploadControl.addEventListener('drop', function (evt) {
-    evt.target.style.backgroundColor = '';
-    // uploadFormPreview.replaceChild(draggedItem, drugPopup);
-    uploadOverlay.classList.remove('hidden');
-    evt.preventDefault();
-  });
+  //   document.addEventListener('mousemove', onMouseMove);
+  //   document.addEventListener('mouseup', onMouseUp);
+  // });
 
-  uploadControl.addEventListener('dragenter', function (evt) {
-    evt.target.style.backgroundColor = 'white';
-    evt.preventDefault();
-  });
+  // uploadControl.addEventListener('dragover', function (evt) {
+  //   evt.preventDefault();
+  //   return false;
+  // });
 
-  uploadControl.addEventListener('dragleave', function (evt) {
-    evt.target.style.backgroundColor = '';
-    evt.preventDefault();
-  });
+  // uploadControl.addEventListener('drop', function (evt) {
+  //   evt.target.style.backgroundColor = '';
+  //   // uploadFormPreview.replaceChild(draggedItem, drugPopup);
+  //   uploadOverlay.classList.remove('hidden');
+  //   evt.preventDefault();
+  // });
 
-})(window.data);
+  // uploadControl.addEventListener('dragenter', function (evt) {
+  //   evt.target.style.backgroundColor = 'white';
+  //   evt.preventDefault();
+  // });
+
+  // uploadControl.addEventListener('dragleave', function (evt) {
+  //   evt.target.style.backgroundColor = '';
+  //   evt.preventDefault();
+  // });
+
 
