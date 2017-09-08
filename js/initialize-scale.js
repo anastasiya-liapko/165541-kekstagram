@@ -1,7 +1,6 @@
 'use strict';
 
 window.initializeScale = (function () {
-
   var setResizeValue = function (button, number, action) {
     button.addEventListener('click', function (evt) {
       var elem = evt.target;
