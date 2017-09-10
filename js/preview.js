@@ -22,9 +22,7 @@ window.preview = (function (backend) {
   };
 
   return {
-    bigImage: function (image, action) {
-      openImage(image, action);
-    }
+    bigImage: openImage
   };
 })(window.backend);
 

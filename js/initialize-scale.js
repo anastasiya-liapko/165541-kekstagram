@@ -21,8 +21,6 @@ window.initializeScale = (function () {
     });
   };
   return {
-    setSize: function (button, value, action, dec, inc) {
-      setResizeValue(button, value, action, dec, inc);
-    }
+    setSize: setResizeValue
   };
 })();

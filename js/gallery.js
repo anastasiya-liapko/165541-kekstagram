@@ -4,12 +4,10 @@
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
-
-  var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
-  document.querySelector('.upload-overlay').classList.add('hidden');
   var picturesList = document.querySelector('.pictures');
-
   // var filters = document.querySelector('.filters');
+
+  document.querySelector('.upload-overlay').classList.add('hidden');
 
   var onPopupEscPress = function (evt) {
     util.isEscEvent(evt, closePopup);
@@ -46,9 +44,58 @@
   };
   preview.bigImage(openPicture, renderGallery);
 
-  picture.image(picturesList, pictureTemplate);
+  picture.image(picturesList);
   // filters.classList.remove('hidden');
 })(window.preview, window.picture, window.util);
+
+// (function (preview, picture, util) {
+//   var galleryOverlay = document.querySelector('.gallery-overlay');
+//   var setupClose = document.querySelector('.gallery-overlay-close');
+//   var openPicture = document.querySelector('.pictures');
+//   var picturesList = document.querySelector('.pictures');
+//   // var filters = document.querySelector('.filters');
+
+//   document.querySelector('.upload-overlay').classList.add('hidden');
+
+//   var onPopupEscPress = function (evt) {
+//     util.isEscEvent(evt, closePopup);
+//   };
+
+//   var openPopup = function () {
+//     galleryOverlay.classList.remove('hidden');
+//     document.addEventListener('keydown', onPopupEscPress);
+//   };
+
+//   var closePopup = function () {
+//     galleryOverlay.classList.add('hidden');
+//     document.removeEventListener('keydown', onPopupEscPress);
+//   };
+
+//   openPicture.addEventListener('click', function (evt) {
+//     evt.preventDefault();
+//     openPopup();
+//   });
+
+//   setupClose.addEventListener('click', function () {
+//     closePopup();
+//   });
+
+//   setupClose.onkeydown = function (evt) {
+//     util.isEnterEvent(evt, closePopup);
+//   };
+
+//   var renderGallery = function (image) {
+//     galleryOverlay.querySelector('.gallery-overlay-image').src = image.url;
+//     galleryOverlay.querySelector('.likes-count').textContent = image.likes;
+//     galleryOverlay.querySelector('.comments-count').textContent = image.comments.length;
+//     return galleryOverlay;
+//   };
+//   preview.bigImage(openPicture, renderGallery);
+
+//   picture.image(picturesList);
+//   // filters.classList.remove('hidden');
+// })(window.preview, window.picture, window.util);
+
 
   // drugPopup.addEventListener('mousedown', function (evt) {
   //   evt.preventDefault();
@@ -107,5 +154,3 @@
   //   evt.target.style.backgroundColor = '';
   //   evt.preventDefault();
   // });
-
-
