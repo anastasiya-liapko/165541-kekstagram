@@ -1,44 +1,17 @@
 'use strict';
 
-window.picture = (function (backend) {
-  var getImages = function (list) {
-    var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
-
-    var renderPicture = function (image) {
+window.picture = (function () {
+  return {
+    renderPicture: function (image) {
+      var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
       var picturesElement = pictureTemplate.cloneNode(true);
       picturesElement.querySelector('img').src = image.url;
       picturesElement.querySelector('.picture-likes').textContent = image.like;
       picturesElement.querySelector('.picture-comments').textContent = image.comment;
       return picturesElement;
-    };
-
-    var successHandler = function (image) {
-      var fragment = document.createDocumentFragment();
-      for (var i = 0; i < image.length; i++) {
-        fragment.appendChild(renderPicture(image[i]));
-      }
-      list.appendChild(fragment);
-    };
-
-    var errorHandler = function (errorMessage) {
-      var node = document.createElement('div');
-      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-      node.style.position = 'absolute';
-      node.style.left = 0;
-      node.style.right = 0;
-      node.style.fontSize = '30px';
-
-      node.textContent = errorMessage;
-      document.body.insertAdjacentElement('afterbegin', node);
-    };
-
-    backend.load(successHandler, errorHandler);
+    }
   };
-  return {
-    image: getImages
-  };
-})(window.backend);
-
+})();
 
 // window.picture = (function (backend) {
 //   var getImages = function (list) {

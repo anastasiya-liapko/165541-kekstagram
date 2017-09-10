@@ -1,10 +1,10 @@
 'use strict';
 
 window.initializeFilters = (function () {
-  var pickEffect = function (controls, image, controlsContainer, action) {
+  var pickEffect = function (controls, controlsContainer, pin, val, action) {
     controls.addEventListener('click', function (evt) {
       var elem = evt.target;
-      var oldEffect = [
+      var oldEffects = [
         'none',
         'chrome',
         'sepia',
@@ -12,19 +12,21 @@ window.initializeFilters = (function () {
         'phobos',
         'heat',
       ];
-      for (var i = 0; i < oldEffect.length; i++) {
-        if (elem === document.querySelector('#upload-effect-' + oldEffect[i])) {
-          var newEffect = oldEffect[i];
-          action(oldEffect, newEffect);
+      for (var i = 0; i < oldEffects.length; i++) {
+        if (elem === document.querySelector('#upload-effect-' + oldEffects[i])) {
+          var newEffect = oldEffects[i];
+          action(oldEffects, newEffect);
+          pin.style.left = '';
+          val.style.width = '';
         }
       }
-      if (elem === document.querySelector('#upload-effect-' + oldEffect[0])) {
+      if (elem === document.querySelector('#upload-effect-' + oldEffects[0])) {
         controlsContainer.classList.add('hidden');
       }
     });
   };
 
-  var setEffect = function (pin, line, val, image) {
+  var setEffect = function (image, pin, line, val) {
     pin.addEventListener('mousedown', function (evt) {
       var sliderCoords = getCoords(line);
 
@@ -71,7 +73,6 @@ window.initializeFilters = (function () {
 
       return false;
     });
-
     function getCoords(elem) {
       var box = elem.getBoundingClientRect();
 
@@ -83,9 +84,9 @@ window.initializeFilters = (function () {
   };
 
   return {
-    createEffect: function (controls, image, controlsContainer, pin, line, val, action) {
-      pickEffect(controls, image, controlsContainer, action);
-      setEffect(pin, line, val, image);
+    createEffect: function (object) {
+      pickEffect(object[0], object[2], object[3], object[5], object[6]);
+      setEffect(object[1], object[3], object[4], object[5]);
     }
   };
 })();

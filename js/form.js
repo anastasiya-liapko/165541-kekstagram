@@ -6,18 +6,19 @@
   var uploadImage = document.querySelector('.upload-image');
   var uploadOverlay = document.querySelector('.upload-overlay');
   var uploadFormCancel = form.querySelector('.upload-form-cancel');
+
   var uploadEffect = document.querySelector('.upload-effect-controls');
   var effectImagePreview = document.querySelector('.effect-image-preview');
+  var effectControls = document.querySelector('.upload-effect-level');
+  var thumbElem = document.querySelector('.upload-effect-level-pin');
+  var sliderLine = document.querySelector('.upload-effect-level-val');
+  var sliderElem = document.querySelector('.upload-effect-level-line');
+
   var uploadResizeControlsValue = form.querySelector('.upload-resize-controls-value');
-  var uploadResizeControls = form.querySelector('.upload-resize-controls');
   var resizeControlDec = document.querySelector('.upload-resize-controls-button-dec');
   var resizeControlInc = document.querySelector('.upload-resize-controls-button-inc');
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
-  var thumbElem = document.querySelector('.upload-effect-level-pin');
-  var sliderLine = document.querySelector('.upload-effect-level-val');
-  var sliderElem = document.querySelector('.upload-effect-level-line');
-  var effectControls = document.querySelector('.upload-effect-level');
 
   var clickHundler = function () {
     uploadOverlay.classList.add('hidden');
@@ -46,21 +47,22 @@
   });
 
   effectControls.classList.add('hidden');
-  var changeEffect = function (oldEffect, newEffect) {
-    oldEffect.forEach(function (item, i) {
+  var changeEffect = function (oldEffects, newEffect) {
+    oldEffects.forEach(function (item, i) {
       effectImagePreview.classList.remove('effect-' + item);
     });
     effectImagePreview.style.filter = '';
     effectImagePreview.classList.add('effect-' + newEffect);
     effectControls.classList.remove('hidden');
   };
-  initializeFilters.createEffect(uploadEffect, effectImagePreview, effectControls, thumbElem, sliderElem, sliderLine, changeEffect);
+  var parameters = [uploadEffect, effectImagePreview, effectControls, thumbElem, sliderElem, sliderLine, changeEffect];
+  initializeFilters.createEffect(parameters);
 
   var adjustScale = function (value) {
     effectImagePreview.style.transform = 'scale(' + value / 100 + ')';
   };
 
-  window.initializeScale.setSize(uploadResizeControls, uploadResizeControlsValue, adjustScale, resizeControlDec, resizeControlInc);
+  initializeScale.setSize(uploadResizeControlsValue, adjustScale, resizeControlDec, resizeControlInc);
 
   uploadFormDescription.addEventListener('invalid', function (evt) {
     if (uploadFormDescription.validity.valueMissing) {

@@ -1,6 +1,6 @@
 'use strict';
 
-(function (preview, picture, util) {
+(function (preview, picture, util, backend) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
@@ -44,57 +44,22 @@
   };
   preview.bigImage(openPicture, renderGallery);
 
-  picture.image(picturesList);
+  var successHandler = function (image) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < image.length; i++) {
+      fragment.appendChild(picture.renderPicture(image[i]));
+    }
+    picturesList.appendChild(fragment);
+  };
+
+  var errorHandler = function (errorMessage) {
+    util.error(errorMessage);
+  };
+
+  backend.load(successHandler, errorHandler);
+
   // filters.classList.remove('hidden');
-})(window.preview, window.picture, window.util);
-
-// (function (preview, picture, util) {
-//   var galleryOverlay = document.querySelector('.gallery-overlay');
-//   var setupClose = document.querySelector('.gallery-overlay-close');
-//   var openPicture = document.querySelector('.pictures');
-//   var picturesList = document.querySelector('.pictures');
-//   // var filters = document.querySelector('.filters');
-
-//   document.querySelector('.upload-overlay').classList.add('hidden');
-
-//   var onPopupEscPress = function (evt) {
-//     util.isEscEvent(evt, closePopup);
-//   };
-
-//   var openPopup = function () {
-//     galleryOverlay.classList.remove('hidden');
-//     document.addEventListener('keydown', onPopupEscPress);
-//   };
-
-//   var closePopup = function () {
-//     galleryOverlay.classList.add('hidden');
-//     document.removeEventListener('keydown', onPopupEscPress);
-//   };
-
-//   openPicture.addEventListener('click', function (evt) {
-//     evt.preventDefault();
-//     openPopup();
-//   });
-
-//   setupClose.addEventListener('click', function () {
-//     closePopup();
-//   });
-
-//   setupClose.onkeydown = function (evt) {
-//     util.isEnterEvent(evt, closePopup);
-//   };
-
-//   var renderGallery = function (image) {
-//     galleryOverlay.querySelector('.gallery-overlay-image').src = image.url;
-//     galleryOverlay.querySelector('.likes-count').textContent = image.likes;
-//     galleryOverlay.querySelector('.comments-count').textContent = image.comments.length;
-//     return galleryOverlay;
-//   };
-//   preview.bigImage(openPicture, renderGallery);
-
-//   picture.image(picturesList);
-//   // filters.classList.remove('hidden');
-// })(window.preview, window.picture, window.util);
+})(window.preview, window.picture, window.util, window.backend);
 
 
   // drugPopup.addEventListener('mousedown', function (evt) {
