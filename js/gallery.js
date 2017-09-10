@@ -1,6 +1,6 @@
 'use strict';
 
-(function (preview, picture, data) {
+(function (preview, picture, util) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var setupClose = document.querySelector('.gallery-overlay-close');
   var openPicture = document.querySelector('.pictures');
@@ -9,8 +9,10 @@
   document.querySelector('.upload-overlay').classList.add('hidden');
   var picturesList = document.querySelector('.pictures');
 
+  var filters = document.querySelector('.filters');
+
   var onPopupEscPress = function (evt) {
-    data.isEscEvent(evt, closePopup);
+    util.isEscEvent(evt, closePopup);
   };
 
   var openPopup = function () {
@@ -33,7 +35,7 @@
   });
 
   setupClose.onkeydown = function (evt) {
-    data.isEnterEvent(evt, closePopup);
+    util.isEnterEvent(evt, closePopup);
   };
 
   var renderGallery = function (image) {
@@ -44,15 +46,9 @@
   };
   preview.bigImage(openPicture, renderGallery);
 
-  var renderPictures = function (image) {
-    var picturesElement = pictureTemplate.cloneNode(true);
-    picturesElement.querySelector('img').src = image.url;
-    picturesElement.querySelector('.picture-likes').textContent = image.like;
-    picturesElement.querySelector('.picture-comments').textContent = image.comment;
-    return picturesElement;
-  };
-  picture.image(picturesList, renderPictures);
-})(window.preview, window.picture, window.data);
+  picture.image(picturesList, pictureTemplate);
+  // filters.classList.remove('hidden');
+})(window.preview, window.picture, window.util);
 
   // drugPopup.addEventListener('mousedown', function (evt) {
   //   evt.preventDefault();
