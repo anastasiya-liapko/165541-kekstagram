@@ -1,7 +1,7 @@
 'use strict';
 
 window.initializeFilters = (function () {
-  var pickEffect = function (controls, image, controlsContainer) {
+  var pickEffect = function (controls, image, controlsContainer, action) {
     controls.addEventListener('click', function (evt) {
       var elem = evt.target;
       var oldEffect = [
@@ -12,19 +12,10 @@ window.initializeFilters = (function () {
         'phobos',
         'heat',
       ];
-      var newEffect;
-      var changeEffect = function () {
-        oldEffect.forEach(function (item, i) {
-          image.classList.remove('effect-' + item);
-        });
-        image.style.filter = '';
-        image.classList.add('effect-' + newEffect);
-        controlsContainer.classList.remove('hidden');
-      };
       for (var i = 0; i < oldEffect.length; i++) {
         if (elem === document.querySelector('#upload-effect-' + oldEffect[i])) {
-          newEffect = oldEffect[i];
-          changeEffect();
+          var newEffect = oldEffect[i];
+          action(oldEffect, newEffect);
         }
       }
       if (elem === document.querySelector('#upload-effect-' + oldEffect[0])) {
@@ -35,12 +26,10 @@ window.initializeFilters = (function () {
 
   var setEffect = function (pin, line, val, image) {
     pin.addEventListener('mousedown', function (evt) {
-      var thumbCoords = getCoords(pin);
-      var shiftX = evt.pageX - thumbCoords.left;
       var sliderCoords = getCoords(line);
 
       var onMouseMove = function (moveEvt) {
-        var newLeft = moveEvt.pageX - shiftX - sliderCoords.left;
+        var newLeft = moveEvt.pageX - sliderCoords.left;
         if (newLeft < 0) {
           newLeft = 0;
         }
@@ -83,10 +72,6 @@ window.initializeFilters = (function () {
       return false;
     });
 
-    pin.ondragstart = function () {
-      return false;
-    };
-
     function getCoords(elem) {
       var box = elem.getBoundingClientRect();
 
@@ -98,10 +83,9 @@ window.initializeFilters = (function () {
   };
 
   return {
-    createEffect: function (controls, image, controlsContainer, pin, line, val) {
-      pickEffect(controls, image, controlsContainer);
+    createEffect: function (controls, image, controlsContainer, pin, line, val, action) {
+      pickEffect(controls, image, controlsContainer, action);
       setEffect(pin, line, val, image);
     }
   };
 })();
-

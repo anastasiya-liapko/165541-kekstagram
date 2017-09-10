@@ -9,7 +9,7 @@
   document.querySelector('.upload-overlay').classList.add('hidden');
   var picturesList = document.querySelector('.pictures');
 
-  var filters = document.querySelector('.filters');
+  // var filters = document.querySelector('.filters');
 
   var onPopupEscPress = function (evt) {
     util.isEscEvent(evt, closePopup);

@@ -10,6 +10,8 @@
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var uploadResizeControlsValue = form.querySelector('.upload-resize-controls-value');
   var uploadResizeControls = form.querySelector('.upload-resize-controls');
+  var resizeControlDec = document.querySelector('.upload-resize-controls-button-dec');
+  var resizeControlInc = document.querySelector('.upload-resize-controls-button-inc');
   var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
   var uploadFormDescription = document.querySelector('.upload-form-description');
   var thumbElem = document.querySelector('.upload-effect-level-pin');
@@ -44,13 +46,21 @@
   });
 
   effectControls.classList.add('hidden');
-  initializeFilters.createEffect(uploadEffect, effectImagePreview, effectControls, thumbElem, sliderElem, sliderLine);
+  var changeEffect = function (oldEffect, newEffect) {
+    oldEffect.forEach(function (item, i) {
+      effectImagePreview.classList.remove('effect-' + item);
+    });
+    effectImagePreview.style.filter = '';
+    effectImagePreview.classList.add('effect-' + newEffect);
+    effectControls.classList.remove('hidden');
+  };
+  initializeFilters.createEffect(uploadEffect, effectImagePreview, effectControls, thumbElem, sliderElem, sliderLine, changeEffect);
 
   var adjustScale = function (value) {
     effectImagePreview.style.transform = 'scale(' + value / 100 + ')';
   };
 
-  window.initializeScale.setSize(uploadResizeControls, uploadResizeControlsValue, adjustScale);
+  window.initializeScale.setSize(uploadResizeControls, uploadResizeControlsValue, adjustScale, resizeControlDec, resizeControlInc);
 
   uploadFormDescription.addEventListener('invalid', function (evt) {
     if (uploadFormDescription.validity.valueMissing) {

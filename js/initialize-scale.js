@@ -1,18 +1,17 @@
 'use strict';
 
 window.initializeScale = (function () {
-
-  var setResizeValue = function (button, number, action) {
+  var setResizeValue = function (button, number, action, dec, inc) {
     button.addEventListener('click', function (evt) {
       var elem = evt.target;
       var value = number.getAttribute('value');
-      if (elem === document.querySelector('.upload-resize-controls-button-dec')) {
+      if (elem === dec) {
         if (value <= 100 && value > 25) {
           value = +value - 25;
           number.setAttribute('value', value);
           action(value);
         }
-      } else if (elem === document.querySelector('.upload-resize-controls-button-inc')) {
+      } else if (elem === inc) {
         if (value < 100 && value >= 25) {
           value = +value + 25;
           number.setAttribute('value', value);
@@ -22,8 +21,8 @@ window.initializeScale = (function () {
     });
   };
   return {
-    setSize: function (button, value, action) {
-      setResizeValue(button, value, action);
+    setSize: function (button, value, action, dec, inc) {
+      setResizeValue(button, value, action, dec, inc);
     }
   };
 })();

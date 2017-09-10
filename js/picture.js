@@ -34,10 +34,71 @@ window.picture = (function (backend) {
     backend.load(successHandler, errorHandler);
   };
   return {
-    getImages(list, template);
+    image: getImages
   };
 })(window.backend);
 
+
+  // var recommended = document.querySelector('#filter-recommend');
+    // var popular = document.querySelector('#filter-popular');
+    // var discussed = document.querySelector('#filter-discussed');
+    // var random = document.querySelector('#filter-random');
+    // var filters = document.querySelector('.filters');
+    // var pictures = [];
+    // var comparator = function (first, second) {
+    //   if (first > second) {
+    //     return 1;
+    //   } else if (first < second) {
+    //     return -1;
+    //   } else {
+    //     return 0;
+    //   }
+    // };
+    // var compareRandom = function (first, second) {
+    //   return Math.random() - 0.5;
+    // };
+    // var updatePictures = function () {
+    //   load(pictures.slice().sort(comparator));
+    // };
+    // recommended.addEventListener('click', function () {
+    //   load(pictures.sort(function (first, second) {
+    //     return first - second;
+    //   }));
+    // });
+    // popular.addEventListener('click', function () {
+    //   load(pictures.sort(function (first, second) {
+    //     if (first.likes > second.likes) {
+    //       return -1;
+    //     } else if (first.likes < second.likes) {
+    //       return 1;
+    //     } else {
+    //       return 0;
+    //     }
+    //   }));
+    // });
+    // discussed.addEventListener('click', function () {
+    //   load(pictures.sort(function (first, second) {
+    //     first = first.comments.length;
+    //     second = second.comments.length;
+    //     if (first > second) {
+    //       return -1;
+    //     } else if (first < second) {
+    //       return 1;
+    //     } else {
+    //       return 0;
+    //     }
+    //   }));
+    // });
+    // random.addEventListener('click', function () {
+    //   // load(pictures.sort(compareRandom));
+    //   load(pictures.sort(function (first, second) {
+    //     return Math.random() - 0.5;
+    //   }));
+    // });
+    // var successHandler = function (image) {
+    //   pictures = image;
+    //   // updatePictures();
+    // };
 
 
 // window.picture = (function (backend) {
@@ -141,8 +202,6 @@ window.picture = (function (backend) {
 //     }
 //   };
 // })(window.backend);
-
-
 
 
 // window.picture = (function (backend) {
