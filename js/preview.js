@@ -10,14 +10,14 @@ window.preview = (function (backend, util) {
         url = elem.getAttribute('src');
       }
 
-      var successHandler = function (picture) {
-        for (var i = 0; i < picture.length; i++) {
-          var pictureUrl = picture[i].url;
+      var successHandler = function (pictures) {
+        for (var i = 0; i < pictures.length; i++) {
+          var pictureUrl = pictures[i].url;
           if (pictureUrl === url) {
             var index = i;
           }
         }
-        action(picture[index]);
+        action(pictures[index]);
       };
 
       var errorHandler = function (errorMessage) {
