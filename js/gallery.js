@@ -50,7 +50,19 @@
 
   recommended.addEventListener('click', function () {
     pictures.sort(function (first, second) {
-      return pictures.indexOf(first) - pictures.indexOf(second);
+      var firstArray;
+      var firstNumber;
+      var secondArray;
+      var secondNumber;
+      first = first.url;
+      second = second.url;
+      var slash = '/';
+      var dot = '.';
+      firstArray = first.split(slash);
+      firstNumber = firstArray[1].split(dot);
+      secondArray = second.split(slash);
+      secondNumber = secondArray[1].split(dot);
+      return firstNumber[0] - secondNumber[0];
     });
     util.debounce(renderPictures);
   });
