@@ -1,6 +1,6 @@
 'use strict';
 
-window.preview = (function (backend, util) {
+(function () {
   var openImage = function (image, action) {
     image.addEventListener('click', function (evt) {
       evt.preventDefault();
@@ -21,14 +21,14 @@ window.preview = (function (backend, util) {
       };
 
       var errorHandler = function (errorMessage) {
-        util.error(errorMessage);
+        window.util.error(errorMessage);
       };
 
-      backend.load(successHandler, errorHandler);
+      window.backend.load(successHandler, errorHandler);
     });
   };
 
-  return {
+  window.preview = {
     bigImage: openImage
   };
-})(window.backend, window.util);
+})();
